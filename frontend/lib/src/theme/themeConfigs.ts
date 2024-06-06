@@ -22,25 +22,29 @@ import emotionBaseTheme from "./emotionBaseTheme"
 import emotionLightTheme from "./emotionLightTheme"
 import emotionDarkTheme from "./emotionDarkTheme"
 import { ThemeConfig } from "./types"
+import { CustomThemeConfig, ICustomThemeConfig } from "../proto"
+import { createTheme } from "./utils"
 
 declare global {
   interface Window {
     __streamlit?: {
-      LIGHT_THEME: ThemeConfig
-      DARK_THEME: ThemeConfig
+      LIGHT_THEME: ICustomThemeConfig
+      DARK_THEME: ICustomThemeConfig
     }
   }
 }
 
 function mergeTheme(
   theme: ThemeConfig,
-  injectedTheme: Partial<ThemeConfig> | undefined
+  injectedTheme: ICustomThemeConfig | undefined
 ): ThemeConfig {
   // We confirm the injectedTheme is a valid object before merging it
   // since the type makes assumption about the implementation of the
   // injected object.
   if (injectedTheme && isObject(injectedTheme)) {
-    return merge({}, theme, injectedTheme)
+    const themeConfigProto = new CustomThemeConfig(injectedTheme)
+    const customTheme = createTheme(theme.name, themeConfigProto, theme)
+    return merge({}, theme, customTheme)
   }
 
   return theme

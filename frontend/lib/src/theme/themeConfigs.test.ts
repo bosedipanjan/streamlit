@@ -17,6 +17,7 @@
 import cloneDeep from "lodash/cloneDeep"
 import merge from "lodash/merge"
 import { ThemeConfig } from "./types"
+import { CustomThemeConfig } from "src/proto"
 
 describe("themeConfigs", () => {
   let originalLightTheme: ThemeConfig
@@ -36,93 +37,22 @@ describe("themeConfigs", () => {
   })
 
   it("honors the window variables set", async () => {
-    const newLightTheme = cloneDeep(originalLightTheme)
-
-    newLightTheme.emotion.colors.primary = "purple"
-
-    const newDarkTheme = cloneDeep(originalDarkTheme)
-
-    newDarkTheme.emotion.colors.primary = "yellow"
-
     window.__streamlit = {
       LIGHT_THEME: {
-        name: "Other Light",
-        emotion: newLightTheme.emotion,
-        basewebTheme: newLightTheme.basewebTheme,
-        primitives: newLightTheme.primitives,
+        primaryColor: "purple",
       },
       DARK_THEME: {
-        name: "Other Dark",
-        emotion: newDarkTheme.emotion,
-        basewebTheme: newDarkTheme.basewebTheme,
-        primitives: newDarkTheme.primitives,
+        primaryColor: "yellow",
       },
     }
 
     const module = await import("./themeConfigs")
     // Ensure we are not working with the same object
-    expect(newLightTheme).not.toEqual(originalLightTheme)
-    expect(newDarkTheme).not.toEqual(originalDarkTheme)
+    expect(module.lightTheme).not.toEqual(originalLightTheme)
+    expect(module.darkTheme).not.toEqual(originalDarkTheme)
 
-    expect(module.lightTheme).toEqual({
-      name: "Other Light",
-      emotion: newLightTheme.emotion,
-      basewebTheme: newLightTheme.basewebTheme,
-      primitives: newLightTheme.primitives,
-    })
-    expect(module.darkTheme).toEqual({
-      name: "Other Dark",
-      emotion: newDarkTheme.emotion,
-      basewebTheme: newDarkTheme.basewebTheme,
-      primitives: newDarkTheme.primitives,
-    })
-  })
-
-  it("honors the window variables set with deep merge", async () => {
-    const newLightTheme = cloneDeep(originalLightTheme)
-
-    newLightTheme.emotion.colors = {
-      primary: "purple",
-    }
-
-    const newDarkTheme = cloneDeep(originalDarkTheme)
-
-    newDarkTheme.emotion.colors = {
-      primary: "yellow",
-    }
-
-    window.__streamlit = {
-      LIGHT_THEME: {
-        name: "Other Light",
-        emotion: newLightTheme.emotion,
-        basewebTheme: newLightTheme.basewebTheme,
-        primitives: newLightTheme.primitives,
-      },
-      DARK_THEME: {
-        name: "Other Dark",
-        emotion: newDarkTheme.emotion,
-        basewebTheme: newDarkTheme.basewebTheme,
-        primitives: newDarkTheme.primitives,
-      },
-    }
-
-    const module = await import("./themeConfigs")
-    // Ensure we are not working with the same object
-    expect(newLightTheme).not.toEqual(originalLightTheme)
-    expect(newDarkTheme).not.toEqual(originalDarkTheme)
-
-    expect(module.lightTheme).toEqual({
-      name: "Other Light",
-      emotion: merge({}, originalLightTheme.emotion, newLightTheme.emotion),
-      basewebTheme: newLightTheme.basewebTheme,
-      primitives: newLightTheme.primitives,
-    })
-    expect(module.darkTheme).toEqual({
-      name: "Other Dark",
-      emotion: merge({}, originalDarkTheme.emotion, newDarkTheme.emotion),
-      basewebTheme: newDarkTheme.basewebTheme,
-      primitives: newDarkTheme.primitives,
-    })
+    expect(module.lightTheme.emotion.colors.primary).toEqual("purple")
+    expect(module.darkTheme.emotion.colors.primary).toEqual("yellow")
   })
 
   it("maintains original theme if no global themes are specified", async () => {
