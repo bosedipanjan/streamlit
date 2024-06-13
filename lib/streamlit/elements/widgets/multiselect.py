@@ -245,7 +245,8 @@ class MultiSelectMixin:
         >>> options = st.multiselect(
         ...     "What are your favorite colors",
         ...     ["Green", "Yellow", "Red", "Blue"],
-        ...     ["Yellow", "Red"])
+        ...     ["Yellow", "Red"],
+        ... )
         >>>
         >>> st.write("You selected:", options)
 

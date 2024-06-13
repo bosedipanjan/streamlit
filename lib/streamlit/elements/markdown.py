@@ -139,7 +139,7 @@ class MarkdownMixin:
         >>>
         >>> code = '''def hello():
         ...     print("Hello, Streamlit!")'''
-        >>> st.code(code, language='python')
+        >>> st.code(code, language="python")
 
         """
         code_proto = MarkdownProto()
@@ -202,8 +202,8 @@ class MarkdownMixin:
         --------
         >>> import streamlit as st
         >>>
-        >>> st.caption('This is a string that explains something above.')
-        >>> st.caption('A caption with _italics_ :blue[colors] and emojis :sunglasses:')
+        >>> st.caption("This is a string that explains something above.")
+        >>> st.caption("A caption with _italics_ :blue[colors] and emojis :sunglasses:")
 
         """
         caption_proto = MarkdownProto()

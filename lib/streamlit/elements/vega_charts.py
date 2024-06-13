@@ -188,7 +188,9 @@ class VegaLiteState(TypedDict, total=False):
     ...     },
     ... }
     >>>
-    >>> event = st.vega_lite_chart(st.session_state.data, spec, key="vega_chart", on_select="rerun")
+    >>> event = st.vega_lite_chart(
+    ...     st.session_state.data, spec, key="vega_chart", on_select="rerun"
+    ... )
     >>>
     >>> event
 
@@ -687,11 +689,11 @@ class VegaChartsMixin:
         >>> import numpy as np
         >>>
         >>> chart_data = pd.DataFrame(
-        ...    {
-        ...        "col1": np.random.randn(20),
-        ...        "col2": np.random.randn(20),
-        ...        "col3": np.random.choice(["A", "B", "C"], 20),
-        ...    }
+        ...     {
+        ...         "col1": np.random.randn(20),
+        ...         "col2": np.random.randn(20),
+        ...         "col3": np.random.choice(["A", "B", "C"], 20),
+        ...     }
         ... )
         >>>
         >>> st.line_chart(chart_data, x="col1", y="col2", color="col3")
@@ -708,10 +710,15 @@ class VegaChartsMixin:
         >>> import pandas as pd
         >>> import numpy as np
         >>>
-        >>> chart_data = pd.DataFrame(np.random.randn(20, 3), columns=["col1", "col2", "col3"])
+        >>> chart_data = pd.DataFrame(
+        ...     np.random.randn(20, 3), columns=["col1", "col2", "col3"]
+        ... )
         >>>
         >>> st.line_chart(
-        ...    chart_data, x="col1", y=["col2", "col3"], color=["#FF0000", "#0000FF"]  # Optional
+        ...     chart_data,
+        ...     x="col1",
+        ...     y=["col2", "col3"],
+        ...     color=["#FF0000", "#0000FF"],  # Optional
         ... )
 
         .. output::
@@ -871,11 +878,11 @@ class VegaChartsMixin:
         >>> import numpy as np
         >>>
         >>> chart_data = pd.DataFrame(
-        ...    {
-        ...        "col1": np.random.randn(20),
-        ...        "col2": np.random.randn(20),
-        ...        "col3": np.random.choice(["A", "B", "C"], 20),
-        ...    }
+        ...     {
+        ...         "col1": np.random.randn(20),
+        ...         "col2": np.random.randn(20),
+        ...         "col3": np.random.choice(["A", "B", "C"], 20),
+        ...     }
         ... )
         >>>
         >>> st.area_chart(chart_data, x="col1", y="col2", color="col3")
@@ -892,10 +899,15 @@ class VegaChartsMixin:
         >>> import pandas as pd
         >>> import numpy as np
         >>>
-        >>> chart_data = pd.DataFrame(np.random.randn(20, 3), columns=["col1", "col2", "col3"])
+        >>> chart_data = pd.DataFrame(
+        ...     np.random.randn(20, 3), columns=["col1", "col2", "col3"]
+        ... )
         >>>
         >>> st.area_chart(
-        ...    chart_data, x="col1", y=["col2", "col3"], color=["#FF0000", "#0000FF"]  # Optional
+        ...     chart_data,
+        ...     x="col1",
+        ...     y=["col2", "col3"],
+        ...     color=["#FF0000", "#0000FF"],  # Optional
         ... )
 
         .. output::
@@ -1055,11 +1067,11 @@ class VegaChartsMixin:
         >>> import numpy as np
         >>>
         >>> chart_data = pd.DataFrame(
-        ...    {
-        ...        "col1": list(range(20)) * 3,
-        ...        "col2": np.random.randn(60),
-        ...        "col3": ["A"] * 20 + ["B"] * 20 + ["C"] * 20,
-        ...    }
+        ...     {
+        ...         "col1": list(range(20)) * 3,
+        ...         "col2": np.random.randn(60),
+        ...         "col3": ["A"] * 20 + ["B"] * 20 + ["C"] * 20,
+        ...     }
         ... )
         >>>
         >>> st.bar_chart(chart_data, x="col1", y="col2", color="col3")
@@ -1077,11 +1089,18 @@ class VegaChartsMixin:
         >>> import numpy as np
         >>>
         >>> chart_data = pd.DataFrame(
-        ...    {"col1": list(range(20)), "col2": np.random.randn(20), "col3": np.random.randn(20)}
+        ...     {
+        ...         "col1": list(range(20)),
+        ...         "col2": np.random.randn(20),
+        ...         "col3": np.random.randn(20),
+        ...     }
         ... )
         >>>
         >>> st.bar_chart(
-        ...    chart_data, x="col1", y=["col2", "col3"], color=["#FF0000", "#0000FF"]  # Optional
+        ...     chart_data,
+        ...     x="col1",
+        ...     y=["col2", "col3"],
+        ...     color=["#FF0000", "#0000FF"],  # Optional
         ... )
 
         .. output::
@@ -1250,15 +1269,17 @@ class VegaChartsMixin:
         >>> import pandas as pd
         >>> import numpy as np
         >>>
-        >>> chart_data = pd.DataFrame(np.random.randn(20, 3), columns=["col1", "col2", "col3"])
-        >>> chart_data['col4'] = np.random.choice(['A','B','C'], 20)
+        >>> chart_data = pd.DataFrame(
+        ...     np.random.randn(20, 3), columns=["col1", "col2", "col3"]
+        ... )
+        >>> chart_data["col4"] = np.random.choice(["A", "B", "C"], 20)
         >>>
         >>> st.scatter_chart(
         ...     chart_data,
-        ...     x='col1',
-        ...     y='col2',
-        ...     color='col4',
-        ...     size='col3',
+        ...     x="col1",
+        ...     y="col2",
+        ...     color="col4",
+        ...     size="col3",
         ... )
 
         .. output::
@@ -1273,14 +1294,16 @@ class VegaChartsMixin:
         >>> import pandas as pd
         >>> import numpy as np
         >>>
-        >>> chart_data = pd.DataFrame(np.random.randn(20, 4), columns=["col1", "col2", "col3", "col4"])
+        >>> chart_data = pd.DataFrame(
+        ...     np.random.randn(20, 4), columns=["col1", "col2", "col3", "col4"]
+        ... )
         >>>
         >>> st.scatter_chart(
         ...     chart_data,
-        ...     x='col1',
-        ...     y=['col2', 'col3'],
-        ...     size='col4',
-        ...     color=['#FF0000', '#0000FF'],  # Optional
+        ...     x="col1",
+        ...     y=["col2", "col3"],
+        ...     size="col4",
+        ...     color=["#FF0000", "#0000FF"],  # Optional
         ... )
 
         .. output::
