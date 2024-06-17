@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-import cloneDeep from "lodash/cloneDeep"
-import merge from "lodash/merge"
 import { ThemeConfig } from "./types"
-import { CustomThemeConfig } from "src/proto"
 
 describe("themeConfigs", () => {
   let originalLightTheme: ThemeConfig

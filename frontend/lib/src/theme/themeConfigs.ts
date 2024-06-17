@@ -16,13 +16,15 @@
 
 import { lightThemePrimitives, darkThemePrimitives } from "baseui"
 import isObject from "lodash/isObject"
-import merge from "lodash/merge"
 import { baseuiLightTheme, baseuiDarkTheme } from "./baseui"
 import emotionBaseTheme from "./emotionBaseTheme"
 import emotionLightTheme from "./emotionLightTheme"
 import emotionDarkTheme from "./emotionDarkTheme"
 import { ThemeConfig } from "./types"
-import { CustomThemeConfig, ICustomThemeConfig } from "../proto"
+import {
+  CustomThemeConfig,
+  ICustomThemeConfig,
+} from "@streamlit/lib/src/proto"
 import { createTheme } from "./utils"
 
 declare global {
@@ -43,8 +45,7 @@ function mergeTheme(
   // injected object.
   if (injectedTheme && isObject(injectedTheme)) {
     const themeConfigProto = new CustomThemeConfig(injectedTheme)
-    const customTheme = createTheme(theme.name, themeConfigProto, theme)
-    return merge({}, theme, customTheme)
+    return createTheme(theme.name, themeConfigProto, theme)
   }
 
   return theme
