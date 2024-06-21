@@ -15,41 +15,11 @@
  */
 
 import { lightThemePrimitives, darkThemePrimitives } from "baseui"
-import isObject from "lodash/isObject"
 import { baseuiLightTheme, baseuiDarkTheme } from "./baseui"
 import emotionBaseTheme from "./emotionBaseTheme"
 import emotionLightTheme from "./emotionLightTheme"
 import emotionDarkTheme from "./emotionDarkTheme"
 import { ThemeConfig } from "./types"
-import {
-  CustomThemeConfig,
-  ICustomThemeConfig,
-} from "@streamlit/lib/src/proto"
-import { createTheme } from "./utils"
-
-declare global {
-  interface Window {
-    __streamlit?: {
-      LIGHT_THEME: ICustomThemeConfig
-      DARK_THEME: ICustomThemeConfig
-    }
-  }
-}
-
-function mergeTheme(
-  theme: ThemeConfig,
-  injectedTheme: ICustomThemeConfig | undefined
-): ThemeConfig {
-  // We confirm the injectedTheme is a valid object before merging it
-  // since the type makes assumption about the implementation of the
-  // injected object.
-  if (injectedTheme && isObject(injectedTheme)) {
-    const themeConfigProto = new CustomThemeConfig(injectedTheme)
-    return createTheme(theme.name, themeConfigProto, theme)
-  }
-
-  return theme
-}
 
 export const baseTheme: ThemeConfig = {
   name: "base",
@@ -58,22 +28,16 @@ export const baseTheme: ThemeConfig = {
   primitives: lightThemePrimitives,
 }
 
-export const darkTheme: ThemeConfig = mergeTheme(
-  {
-    name: "Dark",
-    emotion: emotionDarkTheme,
-    basewebTheme: baseuiDarkTheme,
-    primitives: darkThemePrimitives,
-  },
-  window.__streamlit?.DARK_THEME
-)
+export const darkTheme: ThemeConfig = {
+  name: "Dark",
+  emotion: emotionDarkTheme,
+  basewebTheme: baseuiDarkTheme,
+  primitives: darkThemePrimitives,
+}
 
-export const lightTheme: ThemeConfig = mergeTheme(
-  {
-    name: "Light",
-    emotion: emotionLightTheme,
-    basewebTheme: baseuiLightTheme,
-    primitives: lightThemePrimitives,
-  },
-  window.__streamlit?.LIGHT_THEME
-)
+export const lightTheme: ThemeConfig = {
+  name: "Light",
+  emotion: emotionLightTheme,
+  basewebTheme: baseuiLightTheme,
+  primitives: lightThemePrimitives,
+}

@@ -18,6 +18,7 @@ import { getLuminance, transparentize } from "color2k"
 import camelcase from "camelcase"
 import decamelize from "decamelize"
 import cloneDeep from "lodash/cloneDeep"
+import isObject from "lodash/isObject"
 import merge from "lodash/merge"
 
 import {
@@ -52,6 +53,15 @@ import { createBaseUiTheme } from "./createThemeUtil"
 export const AUTO_THEME_NAME = "Use system setting"
 export const CUSTOM_THEME_NAME = "Custom Theme"
 
+declare global {
+  interface Window {
+    __streamlit?: {
+      LIGHT_THEME: ICustomThemeConfig
+      DARK_THEME: ICustomThemeConfig
+    }
+  }
+}
+
 export const getSystemTheme = (): ThemeConfig => {
   return window.matchMedia &&
     window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -67,8 +77,8 @@ export const createAutoTheme = (): ThemeConfig => ({
 // Update auto theme in case it has changed
 export const createPresetThemes = (): ThemeConfig[] => [
   createAutoTheme(),
-  lightTheme,
-  darkTheme,
+  mergeTheme(lightTheme, window.__streamlit?.LIGHT_THEME),
+  mergeTheme(darkTheme, window.__streamlit?.DARK_THEME),
 ]
 
 export const isPresetTheme = (themeConfig: ThemeConfig): boolean => {
@@ -309,6 +319,21 @@ export const createTheme = (
   }
 }
 
+function mergeTheme(
+  theme: ThemeConfig,
+  injectedTheme: ICustomThemeConfig | undefined
+): ThemeConfig {
+  // We confirm the injectedTheme is a valid object before merging it
+  // since the type makes assumption about the implementation of the
+  // injected object.
+  if (injectedTheme && isObject(injectedTheme)) {
+    const themeConfigProto = new CustomThemeConfig(injectedTheme)
+    return createTheme(theme.name, themeConfigProto, theme)
+  }
+
+  return theme
+}
+
 export const getCachedTheme = (): ThemeConfig | null => {
   if (!localStorageAvailable()) {
     return null
@@ -323,9 +348,9 @@ export const getCachedTheme = (): ThemeConfig | null => {
     JSON.parse(cachedThemeStr)
   switch (themeName) {
     case lightTheme.name:
-      return lightTheme
+      return mergeTheme(lightTheme, window.__streamlit?.LIGHT_THEME)
     case darkTheme.name:
-      return darkTheme
+      return mergeTheme(darkTheme, window.__streamlit?.LIGHT_THEME)
     default:
       // At this point we're guaranteed that themeInput is defined.
       return createTheme(themeName, themeInput as Partial<CustomThemeConfig>)
@@ -392,11 +417,11 @@ export const getDefaultTheme = (): ThemeConfig => {
 
   // 2. Embed Parameter preference
   if (isLightTheme()) {
-    return lightTheme
+    return mergeTheme(lightTheme, window.__streamlit?.LIGHT_THEME)
   }
 
   if (isDarkTheme()) {
-    return darkTheme
+    return mergeTheme(darkTheme, window.__streamlit?.DARK_THEME)
   }
 
   // 3. OS preference
